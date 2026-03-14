@@ -95,3 +95,37 @@ make seed
 
 This runs `task_01_setup_db.py` which creates the tables and populates them with sample data (30 customers, 50 orders). It is safe to re-run — existing data will be replaced, not duplicated.
 
+## Task 2 — Run the API server
+
+Start the FastAPI development server (served by `uvicorn`) using the Makefile convenience target:
+
+```bash
+make serve
+```
+
+This runs `uvicorn task_02_api:app --reload` inside the project's virtualenv. By default the server binds to `127.0.0.1:8000`. This can be overidden if needed (see example below) but for local testing the default should be fine.
+
+```bash
+# Overidng the host and port
+make serve DEV_HOST=0.0.0.0 DEV_PORT=8080
+```
+
+Endpoints and interactive docs
+- Open the automatic Swagger UI at: http://127.0.0.1:8000/docs
+- Open the ReDoc docs at: http://127.0.0.1:8000/redoc
+
+Quick curl examples
+
+```bash
+# Get customer with id 1
+curl http://127.0.0.1:8000/customers/1
+
+# JSON pretty-print
+curl http://127.0.0.1:8000/customers/1 | jq
+```
+
+Alternatively you can use a tool like Postman.
+
+
+
+
