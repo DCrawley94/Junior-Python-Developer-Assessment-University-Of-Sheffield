@@ -1,5 +1,8 @@
 .PHONY: venv install db seed test
 
+DEV_HOST ?= 127.0.0.1
+DEV_PORT ?= 8000
+
 venv:
 	python -m venv venv
 
@@ -14,3 +17,6 @@ seed: venv
 
 test: venv
 	venv/bin/pytest -vrP
+
+serve: venv
+	venv/bin/uvicorn task_02_api:app --reload --host $(DEV_HOST) --port $(DEV_PORT)

@@ -8,6 +8,9 @@ from task_01_setup_db import get_connection, create_tables
 
 load_dotenv()
 
+from fastapi.testclient import TestClient
+import task_02_api
+
 
 @pytest.fixture
 def db_conn():
@@ -21,6 +24,11 @@ def db_conn():
     # name so tests connect to the test database.
     conn = get_connection(dbname=os.getenv("TEST_DB_NAME"))
     create_tables(conn)
+
+    # Ensure a clean state before inserting fixed test rows
+    with conn.cursor() as cur:
+        cur.execute("TRUNCATE customers, orders RESTART IDENTITY CASCADE")
+    conn.commit()
 
     with conn.cursor() as cur:
         cur.execute("""
@@ -49,3 +57,19 @@ def db_conn():
         cur.execute("TRUNCATE customers, orders RESTART IDENTITY CASCADE")
     conn.commit()
     conn.close()
+
+
+@pytest.fixture
+def test_client(db_conn):
+    """Provide a TestClient that uses the test DB connection for the app.
+
+    The app's `get_db` dependency is overridden to return the shared
+    `db_conn` so requests use the test database. The override is removed
+    after the fixture finishes.
+    """
+    task_02_api.app.dependency_overrides[task_02_api.get_db] = lambda: db_conn
+    client = TestClient(task_02_api.app)
+    yield client
+    client.close()
+    # clean up the override
+    task_02_api.app.dependency_overrides.pop(task_02_api.get_db, None)
