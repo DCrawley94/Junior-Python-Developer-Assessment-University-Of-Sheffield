@@ -47,7 +47,20 @@ class CustomerResponse(BaseModel):
     orders: list[Order]
 
 
-@app.get("/customers/{customer_id}", response_model=CustomerResponse)
+class ErrorResponse(BaseModel):
+    detail: str
+
+
+@app.get(
+    "/customers/{customer_id}",
+    response_model=CustomerResponse,
+    responses={
+        404: {
+            "description": "Customer not found",
+            "content": {"application/json": {"schema": ErrorResponse.schema()}},
+        }
+    },
+)
 def get_customer(customer_id: int, conn=Depends(get_db)):
     """Return a single customer and their orders by customer_id."""
     with conn.cursor() as cur:
