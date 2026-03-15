@@ -1,11 +1,31 @@
 # Junior Python Developer Assessment
 
-> **Environment:** Built and tested on Ubuntu (WSL2) on Windows. The instructions below assume a Linux/macOS environment. If you are on Windows, running inside WSL2 is recommended.
->
-> **WSL users:** PostgreSQL does not start automatically on WSL boot. Run the following before any database steps:
-> ```bash
-> sudo service postgresql start
-> ```
+## Contents
+
+- [Environment](#environment)
+- [Prerequisites](#prerequisites)
+- [Setup](#setup)
+    - [Clone the repository](#1-clone-the-repository)
+    - [Install dependencies](#2-install-dependencies)
+    - [Configure environment variables](#3-configure-environment-variables)
+- [How to Run](#how-to-run)
+    - [Task 1 - Seed the database](#task-1---seed-the-database)
+    - [Task 2 - Run the API server](#task-2---run-the-api-server)
+    - [Task 3 - Run the ETL script](#task-3---run-the-etl-script)
+- [How to Run Tests](#how-to-run-tests)
+- [Choices & Reasoning](#choices--reasoning)
+- [Application Flow](#application-flow)
+- [What I Would Improve](#what-i-would-improve)
+
+## Environment
+
+**Built & tested:** Ubuntu (WSL2) on Windows. The instructions below assume a Linux/macOS environment. If you are on Windows, running inside WSL2 is recommended.
+
+**WSL users:** PostgreSQL does not start automatically on WSL boot. Run the following before any database steps:
+
+```bash
+sudo service postgresql start
+```
 
 ## Prerequisites
 
@@ -18,6 +38,8 @@ Ensure the following are installed before getting started:
 | Make | Any | Pre-installed on macOS/Linux; Windows users should use WSL2. Can also be installed via package manager if necessary e.g. `sudo apt-get install build-essential` on Ubuntu (`make` is included in this package)|
 
 ---
+
+ 
 
 Note: this project uses `make` as a convenience wrapper for common setup commands - please see the full 'How to run' guide for step by step guidance on using the Makefile. If you don't have `make` available and don't want to install it you can run the equivalent commands manually (examples below).
 
