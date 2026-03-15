@@ -13,7 +13,7 @@ Ensure the following are installed before getting started:
 
 | Tool | Version used | Notes |
 |---|---|---|
-| Python | 3.13 | [python.org](https://www.python.org/downloads/) or via pyenv |
+| Python | 3.14 | [python.org](https://www.python.org/downloads/) or via pyenv |
 | PostgreSQL / psql | 16.13 | [postgresql.org](https://www.postgresql.org/download/) or via package manager|
 | Make | Any | Pre-installed on macOS/Linux; Windows users should use WSL2. Can also be installed via package manager|
 
@@ -77,23 +77,33 @@ TEST_DB_NAME=sheffield_assessment_test
 >
 > If your Postgres requires a password, set `DB_HOST=localhost` and fill in `DB_PASSWORD`.
 
-### 4. Create the databases
+
+
+## Task 1 — Seed the database
+
+Create the databases (if not already present) and populate them with sample Customers and Orders:
 
 ```bash
+# create the databases
 make db
-```
 
-This runs `create_db.sql` and creates both `sheffield_assessment` and `sheffield_assessment_test`.
-
-> **Note:** If either database already exists, Postgres will return an error — this is safe to ignore, no data will be affected.
-
-### 5. Seed the database
-
-```bash
+# seed the database
 make seed
 ```
 
-This runs `task_01_setup_db.py` which creates the tables and populates them with sample data (30 customers, 50 orders). It is safe to re-run — existing data will be replaced, not duplicated.
+`make db` runs `create_db.sql` and creates both `sheffield_assessment` and `sheffield_assessment_test`.
+
+`make seed` runs `task_01_setup_db.py`, which creates the `customers` and `orders` tables and inserts sample data (30 customers, ~50 orders). Re-running is safe — the script truncates existing data and re-inserts.
+
+Quick verification
+
+```bash
+# Count customers using psql (ensure DB env vars are set)
+psql -d "$DB_NAME" -c "SELECT COUNT(*) FROM customers;"
+
+# Or a quick Python check inside the venv
+venv/bin/python -c "from task_01_setup_db import get_connection; conn=get_connection(); cur=conn.cursor(); cur.execute('SELECT COUNT(*) FROM customers'); print(cur.fetchone()); conn.close()"
+```
 
 ## Task 2 — Run the API server
 
@@ -103,10 +113,10 @@ Start the FastAPI development server (served by `uvicorn`) using the Makefile co
 make serve
 ```
 
-This runs `uvicorn task_02_api:app --reload` inside the project's virtualenv. By default the server binds to `127.0.0.1:8000`. This can be overidden if needed (see example below) but for local testing the default should be fine.
+This runs `uvicorn task_02_api:app --reload` inside the project's virtualenv. By default the server binds to `127.0.0.1:8000`. This can be overridden if needed (see example below) but for local testing the default should be fine.
 
 ```bash
-# Overidng the host and port
+# Overriding the host and port
 make serve DEV_HOST=0.0.0.0 DEV_PORT=8080
 ```
 
@@ -125,6 +135,31 @@ curl http://127.0.0.1:8000/customers/1 | jq
 ```
 
 Alternatively you can use a tool like Postman.
+
+
+## Task 3 — Run the ETL script
+
+Run the ETL job using the Makefile convenience target:
+
+```bash
+make etl
+```
+
+This runs `python task_03_etl.py` inside the project's virtualenv and writes a CSV to `output/export.csv`.
+
+Notes:
+- Ensure the database is created and seeded (`make db` / `make seed`) and `.env` is configured.
+- The script extracts active customers and their orders, computes `total_value = quantity * unit_price`, and writes the results.
+
+Quick checks
+
+```bash
+# Run ETL
+make etl
+
+# Inspect the first few lines
+head -n 5 output/export.csv
+```
 
 
 
