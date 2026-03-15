@@ -1,15 +1,8 @@
-# Task 3 - ETL Script
-#
-# A standalone script intended to be run on a schedule (e.g. cron job).
-# Reads directly from the database and writes results to output/export.csv.
-#
-# Steps:
-#   1. Extract  - query all *active* customers and their orders
-#   2. Transform - full_name = first_name + " " + surname
-#                  total_value = quantity * unit_price
-#   3. Export   - write results to output/export.csv
-#
-# Run with: python etl.py
+"""ETL: extract active customers+orders, transform and export CSV.
+
+Functions: `extract(conn)`, `transform(rows)`, `export(data, path)`.
+Run: `python task_03_etl.py` in virtual environment (or `make etl`).
+"""
 
 import csv
 import os

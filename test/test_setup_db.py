@@ -1,3 +1,16 @@
+"""Tests for Task 1 - database setup and seeding.
+
+These tests verify that the schema and seeding behave as expected.
+
+Fixtures used (from `test/conftest.py`):
+
+ - `db_conn`: psycopg2 connection to the test database; provides a clean
+     environment for each test and is torn down after use.
+
+The `seed_data` function is imported from the application module and used
+directly in tests to populate deterministic sample data.
+"""
+
 from task_01_setup_db import seed_data
 
 

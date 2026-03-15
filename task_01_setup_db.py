@@ -1,7 +1,15 @@
+"""Create DB schema and seed sample Customers/Orders.
+
+Creates `customers` and `orders` tables and populates them with Faker data.
+Run: `python task_01_setup_db.py` in virtual environment (or `make seed`).
+"""
+
 import os
 import random
+from typing import Optional
 
 import psycopg2
+from psycopg2.extensions import connection as _Conn
 from dotenv import load_dotenv
 from faker import Faker
 
@@ -16,7 +24,7 @@ PRODUCTS = [
 ]
 
 
-def get_connection(dbname=None):
+def get_connection(dbname: Optional[str] = None) -> _Conn:
     """Return a psycopg2 connection. Uses DB_NAME from .env unless overridden.
 
     DB_HOST is optional — omitting it causes psycopg2 to connect via Unix
@@ -35,7 +43,7 @@ def get_connection(dbname=None):
     return psycopg2.connect(**params)
 
 
-def create_tables(conn):
+def create_tables(conn: _Conn) -> None:
     """Create customers and orders tables if they do not already exist."""
     with conn.cursor() as cur:
         cur.execute("""
@@ -59,7 +67,7 @@ def create_tables(conn):
     conn.commit()
 
 
-def seed_data(conn):
+def seed_data(conn: _Conn) -> None:
     """Truncate tables and re-populate with Faker-generated sample data.
 
     Guarantees:

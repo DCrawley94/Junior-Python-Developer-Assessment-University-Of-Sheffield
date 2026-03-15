@@ -1,7 +1,16 @@
-# test/test_api.py
-#
-# Tests for Task 2 - REST API
-# All tests use the fixtures defined in conftest.py (fixed, known data).
+"""Tests for Task 2 - REST API.
+
+This module contains functional tests for the `/customers/{customer_id}`
+endpoint. Tests rely on fixtures defined in `test/conftest.py`:
+
+ - `db_conn`: provides a psycopg2 connection to the test database with
+   a small set of seeded rows.
+ - `test_client`: a FastAPI `TestClient` configured to use the test DB
+   connection so HTTP requests exercise the same data.
+
+Tests are written to be deterministic and rely on the fixed data inserted
+by the `db_conn` fixture (Jane/Bob/Alice).
+"""
 
 
 def test_get_customer_returns_200(test_client, db_conn):
