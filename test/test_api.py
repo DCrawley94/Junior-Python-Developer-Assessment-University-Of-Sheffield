@@ -4,9 +4,6 @@
 # All tests use the fixtures defined in conftest.py (fixed, known data).
 
 
-import json
-
-
 def test_get_customer_returns_200(test_client, db_conn):
 	"""A valid customer_id should return a 200 response."""
 	with db_conn.cursor() as cur:

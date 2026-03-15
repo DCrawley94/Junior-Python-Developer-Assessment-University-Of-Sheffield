@@ -1,15 +1,13 @@
 import os
 
-import psycopg2
 import pytest
 from dotenv import load_dotenv
+from fastapi.testclient import TestClient
 
 from task_01_setup_db import get_connection, create_tables
+import task_02_api
 
 load_dotenv()
-
-from fastapi.testclient import TestClient
-import task_02_api
 
 
 @pytest.fixture
