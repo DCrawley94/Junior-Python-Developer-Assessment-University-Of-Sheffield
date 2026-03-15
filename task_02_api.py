@@ -57,7 +57,7 @@ class ErrorResponse(BaseModel):
     responses={
         404: {
             "description": "Customer not found",
-            "content": {"application/json": {"schema": ErrorResponse.schema()}},
+            "content": {"application/json": {"schema": ErrorResponse.model_json_schema()}},
         }
     },
 )
