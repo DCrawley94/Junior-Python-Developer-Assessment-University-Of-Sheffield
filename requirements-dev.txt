@@ -1,5 +1,0 @@
--r requirements.txt
-
-faker
-pytest
-httpx

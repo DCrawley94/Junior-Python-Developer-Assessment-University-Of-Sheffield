@@ -7,7 +7,7 @@ venv:
 	python -m venv venv
 
 install: venv
-	venv/bin/pip install -r requirements-dev.txt
+	venv/bin/pip install -r requirements.txt
 
 db:
 	psql -f create_db.sql
